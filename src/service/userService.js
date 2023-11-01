@@ -29,71 +29,89 @@ const createNewUser = async (email, password, username) => {
   }
 };
 const getUserList = async () => {
-  const connection = await mysql.createConnection({
-    host: "127.0.0.1",
-    port: "4000",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird
-  });
-  try {
-    const [rows, fields] = await connection.execute("Select * from user");
-    return rows;
-  } catch (error) {}
+  let users = [];
+  users = await db.User.findAll();
+  return users;
+  // const connection = await mysql.createConnection({
+  //   host: "127.0.0.1",
+  //   port: "4000",
+  //   user: "root",
+  //   database: "jwt",
+  //   Promise: bluebird
+  // });
+  // try {
+  //   const [rows, fields] = await connection.execute("Select * from user");
+  //   return rows;
+  // } catch (error) {}
 };
-const deleteUser = async (id) => {
-  const connection = await mysql.createConnection({
-    host: "127.0.0.1",
-    port: "4000",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird
+const deleteUser = async (usesId) => {
+  await db.User.destroy({
+    where: { id: usesId }
   });
-  try {
-    const [rows, fields] = await connection.execute(
-      "Delete  from user WHERE id=?",
-      [id]
-    );
-    return rows;
-  } catch (error) {}
+
+  // const connection = await mysql.createConnection({
+  //   host: "127.0.0.1",
+  //   port: "4000",
+  //   user: "root",
+  //   database: "jwt",
+  //   Promise: bluebird
+  // });
+  // try {
+  //   const [rows, fields] = await connection.execute(
+  //     "Delete  from user WHERE id=?",
+  //     [id]
+  //   );
+  //   return rows;
+  // } catch (error) {}
 };
 
 const getUserById = async (id) => {
-  const connection = await mysql.createConnection({
-    host: "127.0.0.1",
-    port: "4000",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird
+  let user = {};
+  user = await db.User.findOne({
+    where: { id: id }
   });
-  try {
-    const [rows, fields] = await connection.execute(
-      "Select *  from user WHERE id=?",
-      [id]
-    );
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+  return user.get({ plain: true });
+  // const connection = await mysql.createConnection({
+  //   host: "127.0.0.1",
+  //   port: "4000",
+  //   user: "root",
+  //   database: "jwt",
+  //   Promise: bluebird
+  // });
+  // try {
+  //   const [rows, fields] = await connection.execute(
+  //     "Select *  from user WHERE id=?",
+  //     [id]
+  //   );
+  //   return rows;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 const updateUserInfo = async (email, username, id) => {
-  const connection = await mysql.createConnection({
-    host: "127.0.0.1",
-    port: "4000",
-    user: "root",
-    database: "jwt",
-    Promise: bluebird
-  });
-  try {
-    const [rows, fields] = await connection.execute(
-      "UPDATE user SET email = ? , username = ? WHERE id =? ",
-      [email, username, id]
-    );
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+  await db.User.update(
+    { email: email, username: username },
+    {
+      where: { id: id }
+    }
+  );
+  // const connection = await mysql.createConnection({
+  //   host: "127.0.0.1",
+  //   port: "4000",
+  //   user: "root",
+  //   database: "jwt",
+  //   Promise: bluebird
+  // });
+  // try {
+  //   const [rows, fields] = await connection.execute(
+  //     "UPDATE user SET email = ? , username = ? WHERE id =? ",
+  //     [email, username, id]
+  //   );
+  //   return rows;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 module.exports = {
   createNewUser,
