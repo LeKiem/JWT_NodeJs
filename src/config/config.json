@@ -2,8 +2,9 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "database_development",
+    "database": "jwt",
     "host": "127.0.0.1",
+    "port": "4000",
     "dialect": "mysql"
   },
   "test": {
