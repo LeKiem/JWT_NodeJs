@@ -4,7 +4,6 @@
     "password": null,
     "database": "jwt",
     "host": "127.0.0.1",
-    "port": "4000",
     "dialect": "mysql",
     "logging": false,
     "define": {
