@@ -30,7 +30,9 @@ connection();
 
 initWebRouters(app);
 initApiRouters(app);
-
+app.use((req, res) => {
+  return res.send("404");
+});
 app.listen(PORT, () => {
   console.log("JWT Backend is running on the port = " + PORT);
 });

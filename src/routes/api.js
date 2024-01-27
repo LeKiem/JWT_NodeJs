@@ -4,11 +4,14 @@ import apiController from "../controller/apiController";
 import userController from "../controller/userController";
 import groupController from "../controller/groupController";
 const router = express.Router();
-
+const testMiddleware = (req, res, next) => {
+  console.log("Middlware");
+  next();
+};
 const initApiRouters = (app) => {
   router.get("/test-api", apiController.testApi);
   router.post("/register", apiController.handleRegister);
-  router.post("/login", apiController.handleLogin);
+  router.post("/login", testMiddleware, apiController.handleLogin);
 
   router.get("/user/read", userController.readFunc);
   router.post("/user/create", userController.createFunc);
