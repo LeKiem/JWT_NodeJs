@@ -16,17 +16,75 @@ const createJWT = (payload) => {
 };
 const verifyToken = (token) => {
   let key = process.env.JWT_SERCRET;
-  let data = null;
+  let decode = null;
 
   try {
-    let decode = jwt.verify(token, key);
-    data = decode;
+    decode = jwt.verify(token, key);
   } catch (err) {
     console.log(err);
   }
-  return data;
+  return decode;
+};
+
+const checkUserJWT = (req, res, next) => {
+  let cookies = req.cookies;
+  if (cookies && cookies.jwt) {
+    let token = cookies.jwt;
+    let decode = verifyToken(token);
+
+    if (decode) {
+      req.user = decode;
+      next();
+    } else {
+      return res.status(401).json({
+        EC: -1,
+        DT: "",
+        EM: "Not authenticaed the user",
+      });
+    }
+
+    console.log("jwt:", cookies.jwt);
+  } else {
+    return res.status(401).json({
+      EC: -1,
+      DT: "",
+      EM: "Not authenticaed the user",
+    });
+  }
+};
+const checkuserpermission = (req, res, next) => {
+  if (req.user) {
+    let email = req.user.email;
+    let roles = req.user.groupWithRoles.Roles;
+    let currentUrl = req.path;
+    if (!roles || roles.lenght === 0) {
+      return res.status(403).json({
+        EC: -1,
+        DT: "",
+        EM: `You don't permission to access this resource...`,
+      });
+    }
+    let canAccess = roles.some((item) => item.url === currentUrl);
+    if (canAccess == true) {
+      next();
+    } else {
+      return res.status(403).json({
+        EC: -1,
+        DT: "",
+        EM: `You don't permission to access this resource...`,
+      });
+    }
+  } else {
+    return res.status(401).json({
+      EC: -1,
+      DT: "",
+      EM: "Not authenticaed the user",
+    });
+  }
 };
 module.exports = {
   createJWT,
   verifyToken,
+  checkUserJWT,
+  checkuserpermission,
 };
