@@ -6,6 +6,7 @@ const handleHome = (req, res) => {
 const handleUserPage = async (req, res) => {
   let userList = await userService.getUserList();
   // console.log(userList);
+  // res.cookie()
   return res.render("user.ejs", { userList });
 };
 
@@ -47,5 +48,5 @@ module.exports = {
   handleCreateNewUser,
   handleDeleteUser,
   getUpdateUserPage,
-  handleUpdateUser
+  handleUpdateUser,
 };
