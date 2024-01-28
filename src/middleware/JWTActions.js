@@ -56,7 +56,7 @@ const checkUserJWT = (req, res, next) => {
       });
     }
 
-    console.log("jwt:", cookies.jwt);
+    // console.log("jwt:", cookies.jwt);
   } else {
     return res.status(401).json({
       EC: -1,
